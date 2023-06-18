@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <vector>
 #include <utility>
-
+#include <climits>
 #include "../config.hpp"
 
 
@@ -31,7 +31,8 @@ class Board{
       {0, 0, 0, 0, 0},
     }};
 };
-
+enum color {white,black};
+enum chess {pawn=1, rook, knight, bishop, queen, king};
 enum GameState {
   UNKNOWN = 0,
   WIN,
