@@ -14,17 +14,19 @@
 int State::evaluate(){
   // [TODO] design your own evaluation function
   int table[7];
-  table[pawn]=10;
-  table[rook]=15;
-  table[knight]=21;
-  table[bishop]=11;
-  table[queen]=22;
+  table[empty]=0;
+  table[pawn]=2;
+  table[rook]=6;
+  table[knight]=7;
+  table[bishop]=8;
+  table[queen]=20;
   table[king]=1412;
   int value[2]={0,0};
   for(int c=white;c<=black;c++)
     for(int i=0;i<6;i++)
       for(int j=0;j<5;j++)
-        value[c]+=table[board.board[c][i][j]];
+        if(board.board[c][i][j])
+          value[c]+=table[board.board[c][i][j]];
   return value[white]-value[black];
 }
 

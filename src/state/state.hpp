@@ -32,7 +32,7 @@ class Board{
     }};
 };
 enum color {white,black};
-enum chess {pawn=1, rook, knight, bishop, queen, king};
+enum chess {empty, pawn, rook, knight, bishop, queen, king};
 enum GameState {
   UNKNOWN = 0,
   WIN,
