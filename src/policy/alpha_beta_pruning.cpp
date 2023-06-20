@@ -1,9 +1,9 @@
 #include <cstdlib>
 
 #include "../state/state.hpp"
-#include "./minimax.hpp"
+#include "./alpha_beta_pruning.hpp"
 using namespace std;
-Move Minimax::get_move(State *state, int depth){
+Move Alpha_beta_pruning::get_move(State *state, int depth){
     if(!state->legal_actions.size())
     state->get_legal_actions();
     Move move=state->legal_actions[0];
@@ -14,7 +14,7 @@ Move Minimax::get_move(State *state, int depth){
     case 0:
         value=INT_MIN;
         for(Move it:actions){
-            int next_value=minimax(state->next_state(it),depth-1);
+            int next_value=alpha_beta_pruning(state->next_state(it),depth-1,INT_MIN,INT_MAX);
             if(value<next_value){
                 value=next_value;
                 move=it;
@@ -23,7 +23,7 @@ Move Minimax::get_move(State *state, int depth){
     case 1:
         value=INT_MAX;
         for(Move it:actions){
-            int next_value=minimax(state->next_state(it),depth-1);
+            int next_value=alpha_beta_pruning(state->next_state(it),depth-1,INT_MIN,INT_MAX);
             if(value>next_value){
                 value=next_value;
                 move=it;
@@ -31,7 +31,7 @@ Move Minimax::get_move(State *state, int depth){
         }return move;
     }
 }
-int Minimax::minimax(State *state, int depth){
+int Alpha_beta_pruning::alpha_beta_pruning(State *state, int depth, int alpha, int beta){
     if(!state->legal_actions.size())
     state->get_legal_actions();
 
@@ -39,17 +39,16 @@ int Minimax::minimax(State *state, int depth){
     
     if(!depth||state->legal_actions.empty())
         return state->evaluate();
-    int value;
     switch (state->player){
     case 0:
-        value=INT_MIN;
-        for(Move it:actions)
-            value=max(value,minimax(state->next_state(it),depth-1));
-        return value;
+        for(Move it:actions){
+            alpha=max(alpha,alpha_beta_pruning(state->next_state(it),depth-1,alpha,beta));
+            if(alpha>=beta) break;
+        }return alpha;
     case 1:
-        value=INT_MAX;
-        for(Move it:actions)
-            value=min(value,minimax(state->next_state(it),depth-1));
-        return value;
+        for(Move it:actions){
+            beta=min(beta,alpha_beta_pruning(state->next_state(it),depth-1,alpha,beta));
+            if(alpha>=beta) break;
+        }return beta;
     }
 }
